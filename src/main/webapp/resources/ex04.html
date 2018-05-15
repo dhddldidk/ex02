@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="handlebars-v4.0.10.js"></script>
+<style>
+	table,tr,td,th{
+		border:2px solid orange;
+		border-collapse: collapse;
+	}
+</style>
+</head>
+<body>
+
+	<table id="wrapper">
+		<tr>
+			<th>이름</th>
+			<th>아이디</th>
+			<th>메일주소</th>
+		</tr>
+	</table>
+	<!-- list키가 들고 있는 값을 반복시키도록 함 -->
+	<script id="template" type="text/x-handlebars-template">	
+			{{#users}}
+			<tr>
+			<td>{{name}}</td>
+			<td>{{id}}</td>
+			<td>{{email}}</td>
+			</tr>
+			{{/users}}
+		
+	</script>
+	
+	<!-- 제이슨 형태일 때 -->
+	<script>
+
+	var data = {
+		
+			users:[
+					{name:"사과씨", id:"test1", email:"apple@gmail.com"},
+					{name:"당근씨", id:"test2", email:"carrot@gmail.com"},
+					{name:"수박씨", id:"test3", email:"watermelon@gmail.com"},
+					{name:"체리씨", id:"test4", email:"cherry@gmail.com"},
+					{name:"망고씨", id:"test5", email:"mango@gmail.com"}
+				]
+			};
+	
+	var source = $("#template").html();
+	var tFunc = Handlebars.compile(source);
+	
+	$("#wrapper").append(tFunc(data));
+	</script>
+</body>
+</html>

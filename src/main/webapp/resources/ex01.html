@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="handlebars-v4.0.10.js"></script>
+</head>
+<body>
+	<div id="test">
+	</div>
+	<script id="template" type="text/x-handlebars-template">
+		<h1>{{name}}</h1>
+		<div>{{name2}}</div>
+		<h6>{{name3}}</h6>
+	</script>
+	<script>
+		var source = $("#template").html();
+		var d2 = {name:"사과씨", name2:"포도씨", name3:"수박씨"};
+		var tFunc = Handlebars.compile(source);
+		
+		$("#test").html(tFunc(d2));
+	</script>
+</body>
+</html>

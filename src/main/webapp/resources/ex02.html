@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="handlebars-v4.0.10.js"></script>
+</head>
+<body>
+	<ul id="test">
+		
+	</ul>
+	<script id="template" type="text/x-handlebars-template">
+		{{#each.}}
+		<li class="replyItem">
+		<div>{{rno}}</div>
+		<div>{{replytext}}</div>
+		<div>{{replyer}}</div>
+		<div>{{dateTemp replydate}} {{dateTemp2 replydate}}</div> 
+		</li>
+		{{/each}}
+	</script>
+	<script>
+		//시간을 예쁘게 나오게 하기 위해 
+		//<div>{{dateTemp replydate}}</div> 
+		//밑에 함수가 존재하기만 하면 됨-function값은 아무거나 주면 됨 time...value
+		Handlebars.registerHelper("dateTemp", function(time){
+			var dateObj = new Date(time);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth()+1;
+			var date = dateObj.getDate();
+			
+			return year+"/"+month+"/"+date;
+		})
+		
+		var sWeek = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+		
+		Handlebars.registerHelper("dateTemp2", function(value){
+			var dateObj = new Date(value);
+			var week = dateObj.getDay();
+			return sWeek[week];
+		})
+	
+		var data = [
+			{rno:1, replytext:"어렵다 어려워111", replyer:"test1", replydate:new Date()},
+			{rno:2, replytext:"어렵다 어려워222", replyer:"test2", replydate:new Date()},
+			{rno:3, replytext:"어렵다 어려워333", replyer:"test3", replydate:new Date()},
+			{rno:4, replytext:"어렵다 어려워444", replyer:"test4", replydate:new Date()},
+			{rno:5, replytext:"어렵다 어려워555", replyer:"test5", replydate:new Date()}
+		
+		];
+		var source = $("#template").html();
+		var tFunc = Handlebars.compile(source);
+		
+		$("#test").html(tFunc(data));
+	</script>
+</body>
+</html>
