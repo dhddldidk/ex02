@@ -20,4 +20,14 @@
 	<delete id="delete">
 		delete from tbl_reply where rno=#{rno}
 	</delete>
+	
+	<!-- 답글 페이징 처리 -->
+	<select id="listPage" resultType="ReplyVO">
+		select * from tbl_reply where bno=#{bno} order by rno desc 
+		limit #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	<!-- 게시글 전체를 반환하는 갯수 -->
+	<select id="count" resultType="int">
+		select count(bno) from tbl_reply where bno = #{bno}
+	</select>
 </mapper>

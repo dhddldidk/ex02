@@ -1,6 +1,8 @@
 package com.dgit.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dgit.domain.Criteria;
+import com.dgit.domain.PageMaker;
 import com.dgit.domain.ReplyVO;
 import com.dgit.service.ReplyService;
 
@@ -97,6 +101,38 @@ public class ReplyController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
+	
+	//덧글 페이징
+	// 주소 : /{bno}/{page}
+	//List<ReplyVO>와 밑에 나오는 pageNum
+	@RequestMapping(value="/{bno}/{page}", method=RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> listPage(@PathVariable("bno") int bno, 
+												@PathVariable("page") int page) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		
+		try {
+			//위에 리스트를 뽑아냄
+			Criteria cri = new Criteria();
+			cri.setPage(page);
+			List<ReplyVO> list = service.listPageReply(bno, cri);
+			
+			//page maker 만들기
+			PageMaker pageMaker = new PageMaker();
+			pageMaker.setCri(cri);
+			pageMaker.setTotalCount(service.count(bno));//bno가 들고 있는 전체 덧글 갯수
+			
+			//위에 보이는 게시물과 밑에 페이징을 같이 map에 실어서 보냄
+			Map<String, Object> map = new HashMap<>();
+			map.put("list", list);
+			map.put("pageMaker", pageMaker);
+			
+			entity = new ResponseEntity<>(map, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return entity;
 	}

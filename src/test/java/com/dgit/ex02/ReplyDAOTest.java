@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.dgit.domain.Criteria;
 import com.dgit.domain.ReplyVO;
 import com.dgit.persistence.ReplyDAO;
 
@@ -47,8 +48,20 @@ public class ReplyDAOTest {
 		dao.update(vo);
 	}
 	
-	@Test
+	//@Test
 	public void test4Delete() throws Exception {
 		dao.delete(2);
+	}
+	
+	//@Test
+	public void test5ListPage() throws Exception {
+		Criteria cri = new Criteria();
+		cri.setPage(1);
+		dao.listPage(6, cri);
+	}
+	
+	@Test
+	public void test6Count() throws Exception {
+		dao.count(6);
 	}
 }

@@ -6,7 +6,20 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-
+	.pagination{
+		width:100%;
+	}
+	.pagination li{
+		list-style: none;
+		float:left;
+		padding:3px;
+		border:1px solid orange;
+		margin:3px;
+	}
+	.pagination li a{
+		margin:3px;
+		text-decoration: none;	
+	}
 </style>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -28,12 +41,17 @@
 		</div>
 		<button id="addReplyBtn">add Reply</button>
 		<button id="getListBtn">get List All</button>
+		<button id="getListPageBtn">get List Page</button>
 	</div>
 	
 	<hr>
-	<ul id="replies">
 	
-	</ul>
+	<!-- 게시글 리스트가 나오는 부분 -->
+	<ul id="replies"></ul>
+	
+	<!-- 덧글 리스트가 나오는 부분 -->
+	<ul class="pagination"></ul>
+	
 	
 	<!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
@@ -69,7 +87,84 @@
     </div>
   </div>
 	<script type="text/javascript">
+	var pageNumber=1; //화면에 보이는 페이지 번호
 	
+	
+		$("#getListPageBtn").click(function(){
+			//1번째 페이지가 나오도록
+			var bnoVal = $("#bno").val();
+			
+			$.ajax({
+				url:"replies/"+bnoVal+"/"+pageNumber,
+				type:"get",
+				dataType:"json",
+				success:function(result){
+					console.log(result);
+					
+					// 덧글 list
+					displayList(result.list);
+					
+					
+					// 덧글 pagination
+					displayPaging(result);
+				}
+			
+			})
+		})
+		
+		function displayList(list){
+			$("#replies").empty();
+			
+			
+				
+				for(var i =0; i<list.length; i++){
+					var liObj = $("<li>");
+					var btnObj1 = $('<button type="button" class="btn btn-danger update" data-target="#myModal" data-toggle="modal">').html("수정");
+					var btnObj2 = $("<button class='delete'>").html("삭제");
+					var span = $("<span class='rno'>").append(list[i].rno);
+					var spanContext = $("<span class='context'>").append(list[i].replytext);
+					
+					liObj.append(span);
+					liObj.append(", "+list[i].replyer+", ");
+					liObj.append(spanContext);
+					liObj.append(btnObj1).append(btnObj2);
+					$("#replies").append(liObj);
+				}
+				
+			
+		}
+		
+		
+		function displayPaging(result){
+			//pagination
+			var str = "";
+			if(result.pageMaker.prev){
+				str += "<li><a href='#'> << </a></li>";
+			}
+			
+			for(var i = result.pageMaker.startPage; i<=result.pageMaker.endPage; i++){
+				str += "<li><a href='#'> "+i+" </a></li>";
+			}
+			
+			if(result.pageMaker.next){
+				str += "<li><a href='#'> >> </a></li>";
+			}
+			$(".pagination").html(str);
+		}
+		
+		
+		//덧글 페이징에 a태그를 눌렀을 때
+		$(document).on("click", ".pagination a", function(e){
+			e.preventDefault();//a태그 링크 막기
+			
+			//해당 페이지 정보 얻기
+			pageNumber = $(this).text();//해당 a태그의 값이 들어가면 됨
+			
+			//getListPage(ajax를 실행시켜야 함 ) - > 버튼이 클릭되도록 함getListPage
+			$("#getListPageBtn").trigger("click"); // = $("#getListPage").click();
+		})
+		
+		
 		//추가
 		$("#addReplyBtn").click(function(){
 			var bnoVal=$("#bno").val();
