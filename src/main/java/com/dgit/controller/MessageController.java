@@ -17,16 +17,18 @@ import com.dgit.service.MessageService;
 @RestController
 public class MessageController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ReplyController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 	
 	@Autowired
 	private MessageService service;
 	
 	//메시지 추가
-	//"{aa:bb, aa2:bb2}"
+	//"{rno:"",}"
 	@RequestMapping(value="", method=RequestMethod.POST)
 	public ResponseEntity<String> addMessage(@RequestBody MessageVO vo){
-		//rest controller를 쓰고 post 이고, MessageVO를 받아야 할 때 JSON을 써야함
+		//rest controller를 쓰고 post 이고, MessageVO를 받아야 할 때 
+		//@RequestBody를 쓰면 JSON 형식으로 "{aa:bb, aa2:bb2}"넘어와서 
+		//MessageVO 객체를 만들어서 쓸 수 있게 해줌
 		
 		logger.info(vo.toString());
 		

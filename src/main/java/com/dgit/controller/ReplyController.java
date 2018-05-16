@@ -84,7 +84,7 @@ public class ReplyController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			entity = new ResponseEntity<>("fail", HttpStatus.OK);
+			entity = new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
 		return entity;
 	}

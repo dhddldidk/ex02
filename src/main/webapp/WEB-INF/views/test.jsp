@@ -225,7 +225,7 @@
 			$.ajax({
 				type:"delete",
 				url:"${pageContext.request.contextPath}/replies/"+rnoVal,
-				dataType:"json",
+				dataType:"text",
 				success:function(result){
 					console.log(result);
 				}

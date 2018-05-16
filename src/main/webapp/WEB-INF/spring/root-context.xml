@@ -37,6 +37,10 @@
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
 	</bean>	
 	
+	<aop:aspectj-autoproxy/>
+	<aop:config></aop:config>
+	
 	<context:component-scan base-package="com.dgit.persistence"></context:component-scan>
 	<context:component-scan base-package="com.dgit.service"></context:component-scan>
+	<context:component-scan base-package="com.dgit.aop"></context:component-scan>
 </beans>
