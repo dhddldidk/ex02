@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dgit.util.MediaUtils;
+import com.dgit.util.UploadFileUtils;
 
 @Controller
 public class UploadController {
@@ -266,17 +267,33 @@ public class UploadController {
 		logger.info("writer : "+ writer);
 		logger.info("file : "+file.getOriginalFilename());
 		
-		//외무 경로에 파일이 저장되도록 함
+		/*//외무 경로에 파일이 저장되도록 함
 		UUID uid = UUID.randomUUID();//중복되지 않는 고유한 키 값을 만들어 줌
 		//파일 이름이 중복되지 않게 랜덤수+고유이름으로 만들어 줌
 		String savedName = uid.toString()+"_"+file.getOriginalFilename();
 		File target = new File(outerUploadPath+"/"+savedName);
 
 		FileCopyUtils.copy(file.getBytes(), target);//(a,b)a꺼를 b에 복사해줌
+*/		
+		
+		//upload처리 해줌
+		String filePath = UploadFileUtils.uploadFile(outerUploadPath, file.getOriginalFilename(), file.getBytes());
 		
 		model.addAttribute("writer", writer);
-		model.addAttribute("file", savedName);
+		model.addAttribute("file", filePath);
 		
 		return "previewResult";
+	}
+	
+	//파일 삭제
+	//2개의 파일 -원본, 썸네일 둘 다 지워야 함
+	@RequestMapping(value="deleteFile", method=RequestMethod.GET)
+	public String deleteFile(String fileName){
+		logger.info("deleteFile -" +fileName);
+		
+		UploadFileUtils.deleteFile(outerUploadPath, fileName);
+		
+		return "deleteResult";
+		
 	}
 }
