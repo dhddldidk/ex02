@@ -31,6 +31,15 @@
 	</beans:bean>
 	<context:component-scan base-package="com.dgit.controller" />
 	
+	<beans:bean id="sampleInterceptor" class="com.dgit.interceptor.SampleInterceptor">
+	</beans:bean>
 	
+	<interceptors>
+		<interceptor>
+			<mapping path="/doA"/>
+			<mapping path="/doB"/>
+			<beans:ref bean="sampleInterceptor"/>
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>
